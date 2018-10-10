@@ -7,7 +7,8 @@ class AuthorForm extends React.Component {
         this.state = {
             name: '',
             imageUrl: '',
-            books: []
+            books: [],
+            bookTemp: ''
         }
     }
     onFieldChange = (event) => {
@@ -22,8 +23,11 @@ class AuthorForm extends React.Component {
     }
 
     handleAddBook = (event) => {
-        this.setState(prevState =>({books : prevState.books.concat([this.state.bookTemp])}) ); 
-        this.state.books.push(this.state.bookTemp)
+        this.setState(prevState =>(
+            {
+                books : prevState.books.concat([this.state.bookTemp]),
+                bookTemp: ''
+            })); 
     }
 
     render() {
@@ -40,7 +44,7 @@ class AuthorForm extends React.Component {
                 <div className="AddAuthorForm__input">
                     <label htmlFor="bookTempl">Books</label>
                     {this.state.books.map((book) => <p key={book}>{book}</p>)}
-                    <input type="text" name="bookTemp" value={this.state.bookTemp} />
+                    <input type="text" name="bookTemp" value={this.state.bookTemp} onChange={this.onFieldChange}/>
                     <input type="button" value="+" onClick={this.handleAddBook} />
 
                 </div>
