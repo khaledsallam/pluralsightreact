@@ -38,19 +38,24 @@ const getTurnData = (authors) => {
 }
 
 
-const state = {
-    turnData: getTurnData(authors),
-    highlight: ''
+const resetState =()=>{
+    return{
+        turnData: getTurnData(authors),
+        highlight: ''
+    };
 };
+
+let state = resetState();
 
 const onAnswerSelected = (answer) => {
     const isCorrect = state.turnData.author.books.some((book) => book === answer);
     state.highlight = isCorrect ? 'correct' : 'wrong';
+    render();
 }
 
 const App = () => {
     return (
-        <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} />
+        <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} onContinue={()=>{state=resetState();}}/>
     );
 }
 
@@ -61,15 +66,19 @@ const AuthorWrapper = withRouter(({ history }) =>
     }} />
 );
 
-ReactDOM.render(
-    <BrowserRouter>
-        <React.Fragment>
-            <Route exact path="/" component={App} />
-            <Route path="/add" component={AuthorWrapper} />
-        </React.Fragment>
-    </BrowserRouter>,
-    document.getElementById('root'));
+
+function render(){
+    ReactDOM.render(
+        <BrowserRouter>
+            <React.Fragment>
+                <Route exact path="/" component={App} />
+                <Route path="/add" component={AuthorWrapper} />
+            </React.Fragment>
+        </BrowserRouter>,
+        document.getElementById('root'));
+}
+render();
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.register();
